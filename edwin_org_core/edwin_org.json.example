@@ -2,33 +2,33 @@
     "org_name": "GIS Zeta",
     "matrix_version": "0.0.1",
     "tree_root": {
-        "base": {
-            "type": "base",
+        "edwin_org_root": {
+            "type": "rand",
+            "root": 1,
+            "list": 0,
             "resp": [
                 "Greetings, I am Edwin, please allow me to assist you. I see you didn't ask about anything, so let me offer you thoughts on what you could ask me about:",
-                "",
-                "I can help with the following topics in relation to your org:",
-                "",
-                "%edwin_org        - This help",
-                "%edwin_org spark  - Apache Spark",
-                "%edwin_org drill  - Apache Drill",
-                "%edwin_org ssh    - Container SSH and File Copy"
+                "Hello, I am Edwin, I can help you with %org_name% information in many ways, please don't hesitate to ask",
+                "Hello %nbuser%, I am your personal data butler, Edwin. I can offer many ways to help, please feel free to ask me anything!"
             ]
         },
         "spark": {
-            "type": "final",
+            "type": "full",
+            "list": 1,
             "resp": [
                 "Apache Spark is available to run - More information found by typing %spark"
             ]
         },
         "drill": {
-            "type": "final",
+            "type": "full",
+            "list": 1,
             "resp": [
                 "Apache Drill is available to run - More information found by typing %drill"
             ]
         },
         "ssh": {
-            "type": "final",
+            "type": "full",
+            "list": 1, 
             "resp": [
                 "Your notebook container also has an SSH Port for SSH for the user %nbuser%",
                 "The host to connect to is: %nbsshhost%",
@@ -43,13 +43,15 @@
         },
         "unknown": {
             "type": "rand",
-            "resp": [ 
+            "list": 0,
+            "resp": [
                     "I am not sure what you are looking to do, please try %edwin_org for options",
                     "Are you sure you meant that? Perhaps %edwin_org will give you more ideas"
             ]
         },
         "vis": {
-            "type": "parent",
+            "list": 1,
+            "type": "full",
             "resp": [
                 "matplotlib is available to do basic visualizations on returned data frames",
                 "",
@@ -64,7 +66,27 @@
                 "newvar = prev_drill.plot(x='yourXaxisCol', y='yourYaxisCol', figsize=(15,10))",
                 "",
                 "There is much more you can do with this, please stay tuned for updates or check the MatPlotLib Doc Pages!"
-            ]
+            ],
+            "children": {
+                "line": {
+                    "type": "full",
+                    "list": 1,
+                    "resp": [
+                        "To do a line chart, here's what you do!",
+                        "",
+                        "You bat your eyes like this"
+                    ]
+                },
+                "pie": {
+                    "type": "full",
+                    "list": 1, 
+                    "resp": [
+                        "Put a pie in it",
+                        "",
+                        "mmm pie"
+                    ]
+                }
+            }
         }
     }
 }
