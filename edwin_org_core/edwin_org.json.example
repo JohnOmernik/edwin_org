@@ -14,6 +14,7 @@
         },
         "spark": {
             "type": "full",
+            "short_desc": "Apache Spark",
             "list": 1,
             "resp": [
                 "Apache Spark is available to run - More information found by typing %spark"
@@ -21,6 +22,7 @@
         },
         "drill": {
             "type": "full",
+            "short_desc": "Apache Drill", 
             "list": 1,
             "resp": [
                 "Apache Drill is available to run - More information found by typing %drill"
@@ -28,6 +30,7 @@
         },
         "ssh": {
             "type": "full",
+            "short_desc": "Other ways to connect to the container via SSH",
             "list": 1, 
             "resp": [
                 "Your notebook container also has an SSH Port for SSH for the user %nbuser%",
@@ -49,9 +52,49 @@
                     "Are you sure you meant that? Perhaps %edwin_org will give you more ideas"
             ]
         },
+        "datasets": {
+            "list": 1,
+            "type": "full",
+            "short_desc": "Lists of Datasets available",
+            "resp": [
+                "We have many data sets at %orgname%, please feel free to drill down on these:",
+                ""
+            ],
+            "cheader": "Workspaces: ",
+            "children": {
+                "workspace1": {
+                    "list": 1,
+                    "type": "full",
+                    "short_desc": "Some great data for our org",
+                    "resp": [
+                        "A pull of the org data to json format and loaded for use",
+                        "Workspace: dfs.workspace1",
+                        ""
+                        ],
+                    "cheader": "Tables for review: ",
+                    "children": {
+                        "view_sales": {
+                            "list": 1,
+                            "type": "full",
+                            "short_desc": "Full View of all data including large blobs of feature data and price history",
+                            "resp": [
+                                "This is the full data set for working. It includes history or adds, removes, odometer, and pricing",
+                                "It's updated every 10 minutes",
+                                "Example (Pulls number of widgets sold per day): ",
+                                "",
+                                "%%drill",
+                                "select endday, count(*) as num_widgets from view_sales where endday >= '2017-06-01'",
+                                "group by endday order by endday ASC"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "vis": {
             "list": 1,
             "type": "full",
+            "short_desc": "Visualizations done in notebook",
             "resp": [
                 "matplotlib is available to do basic visualizations on returned data frames",
                 "",
@@ -61,7 +104,7 @@
                 "",
                 "Then you can use any dataframe variable and .plot to make it happen",
                 "For example, let's say you ran a query with %%drill, those results would be in the prev_drill variable by default",
-                "To visualize with a line chart you could run:",
+                "To visualize with a (default) line chart you could run:",
                 "",
                 "newvar = prev_drill.plot(x='yourXaxisCol', y='yourYaxisCol', figsize=(15,10))",
                 "",
@@ -71,19 +114,21 @@
                 "line": {
                     "type": "full",
                     "list": 1,
+                    "short_desc": "Line Charts",
                     "resp": [
                         "To do a line chart, here's what you do!",
                         "",
-                        "You bat your eyes like this"
+                        "newvar = prev_drill.plot(kind='line', x='yourXaxisCol', y='yourYaxisCol', figsize=(15,10))"
                     ]
                 },
-                "pie": {
+                "bar": {
                     "type": "full",
-                    "list": 1, 
+                    "short_desc": "Bar Charts",
+                    "list": 1,
                     "resp": [
-                        "Put a pie in it",
+                        "To do a bar chart, you do this:",
                         "",
-                        "mmm pie"
+                        "newvar = prev_drill.plot(kind='bar', x='yourXaxisCol', y='yourYaxisCol', figsize=(15,10))"
                     ]
                 }
             }

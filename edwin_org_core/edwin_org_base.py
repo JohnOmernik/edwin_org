@@ -161,17 +161,32 @@ class Edwin_org(Magics):
             for u in node['resp']:
                 print(self.replaceText(u))
         if 'children' in node:
+            if 'cheader' in node:
+                child_head = node['cheader']
+            else:
+                child_head = "This topic also has some related topics you'd be interested in, try referencing:"
             print("")
-            print("This topic also has some related topics you'd be interested in, try referencing:")
+            print(child_head)
             for x in node['children']:
-                print(" - " + x)
+                desc = "No Desc"
+                try:
+                    desc = node['children'][x]['short_desc']
+                except:
+                    pass
+
+                print(" - %s - %s" % (x, desc))
         if 'root' in node:
             print("")
             print("I can offer help on a number of topics, please try mentioning any of these for more details:")
             print("")
             for x in self.org_matrix['tree_root']:
+                desc = "No Desc"
+                try:
+                    desc = self.org_matrix['tree_root'][x]['short_desc']
+                except:
+                    pass
                 if self.org_matrix['tree_root'][x]['list'] == 1:
-                    print(" - %s" % x)
+                    print(" - %s - %s" % (x, desc))
 
 
 #
