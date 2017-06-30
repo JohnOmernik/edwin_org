@@ -17,7 +17,7 @@ class Demo(Magics):
         self.myip = get_ipython()
         self.demo_calls = 0
     def demoHelp(self):
-        print("This is a Demo Help function!"
+        print("This is a Demo Help function!")
         print("Isn't it grand?")
         print("")
         print("The available items:")
