@@ -1,5 +1,13 @@
 # Edwin Org Template
 --------
-A template to add some functionality to Edwin (https://github.com/johnomernik/edwin)
+## Installtion
 
-WIP
+- First you need Edwin (core) at https://github.com/johnomernik/edwin
+- The get this repo, put it somewhere all notebook servers will have access to it
+- Rename edwin.json.template to edwin.json in root of the repo. Edit it (see below)
+- Ensure all your class files that you will be calling are ready to go.
+- Start a notebook server with the ENV Variable "EDWIN_ORG" pointing to root of the directory
+- You are goalden!
+
+
+More to come

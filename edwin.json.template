@@ -1,0 +1,84 @@
+{
+    "matrix_version": "0.0.1",
+    "replacements": {
+        "%org_name%": "Your Org"
+    },
+    "edwin_classes":{
+        "Drill": "drill_core",
+        "Spark": "spark_core"
+    },
+    "tree_root": {
+        "spark": {
+            "type": "full",
+            "short_desc": "Apache Spark",
+            "list": 1,
+            "resp": [
+                "Apache Spark is available to run - More information found by typing %spark"
+            ]
+        },
+        "drill": {
+            "type": "full",
+            "short_desc": "Apache Drill",
+            "list": 1,
+            "resp": [
+                "Apache Drill is available to run - More information found by typing %drill"
+            ]
+        },
+        "ssh": {
+            "type": "full",
+            "short_desc": "Other ways to connect to the container via SSH",
+            "list": 1,
+            "resp": [
+                "Your notebook container also has an SSH Port for SSH for the user %nbuser%",
+                "The host to connect to is: %nbsshhost%",
+                "The port to connect to is: %nbsshport%",
+                "",
+                "Connect Example:",
+                "> ssh -p%nbsshport% %nbuser%@%nbsshhost%",
+                "",
+                "Copy Files Example:",
+                "> scp -P%nbsshport% /path/to/your/file.txt %nbuser%@%nbsshhost%:/home/%nbuser%/"
+            ]
+        },
+        "datasets": {
+            "list": 1,
+            "type": "full",
+            "short_desc": "Lists of Datasets available",
+            "resp": [
+                "We have many data sets at %orgname%, please feel free to drill down on these:",
+                ""
+            ],
+            "cheader": "Workspaces: ",
+            "children": {
+                "Dataset 1": {
+                    "list": 1,
+                    "type": "full",
+                    "short_desc": "Data for our org",
+                    "resp": [
+                        "A pull sales data into json format and loaded for use",
+                        "Workspace: dfs.sales",
+                        "MapRFS Location: /data/prod/sales",
+                        ""
+                        ],
+                    "cheader": "Tables for review: ",
+                    "children": {
+                        "view_sales": {
+                            "list": 1,
+                            "type": "full",
+                            "short_desc": "Full View of all data including large blobs of feature data and price history",
+                            "resp": [
+                                "This is the full data set for working. It includes history or adds, removes, and pricing",
+                                "It's updated every 10 minutes",
+                                "Example (Pulls number of widgets sold per day): ",
+                                "",
+                                "%%drill",
+                                "select endday, count(*) as num_widgets from view_sales where endday >= '2017-06-01'",
+                                "group by endday order by endday ASC"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
