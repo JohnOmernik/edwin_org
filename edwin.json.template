@@ -5,7 +5,8 @@
     },
     "edwin_classes":{
         "Drill": "drill_core",
-        "Spark": "spark_core"
+        "Spark": "spark_core",
+        "Demo": "demo_core"
     },
     "tree_root": {
         "spark": {
