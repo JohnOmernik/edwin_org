@@ -29,6 +29,7 @@ class Drill(Magics):
     drill_connected = False
     pd_display_idx = False
     pd_display_max = 1000
+    pd_replace_crlf = True
     drill_host = ""
     drill_pinned_ip = ""
     drill_user = ""
@@ -158,8 +159,41 @@ class Drill(Magics):
         else:
             print("Drill is already connected - Please type %drill for help on what you can you do")
 
+    def replaceHTMLCRLF(self, instr):
+        gridhtml = instr.replace("<CR><LF>", "<BR>")
+        gridhtml = gridhtml.replace("<CR>", "<BR>")
+        gridhtml = gridhtml.replace("<LF>", "<BR>")
+        gridhtml = gridhtml.replace("&lt;CR&gt;&lt;LF&gt;", "<BR>")
+        gridhtml = gridhtml.replace("&lt;CR&gt;", "<BR>")
+        gridhtml = gridhtml.replace("&lt;LF&gt;", "<BR>")
+        return gridhtml
     def resultsNewWin(self, b):
-        print("OMG I am in the class function!")
+
+        max_col = pd.get_option('max_colwidth')
+        max_rows = pd.get_option('display.max_rows')
+
+        pd.set_option('max_colwidth', 100000)
+        pd.set_option('display.max_rows', None)
+
+        df = self.myip.user_ns['prev_drill']
+
+        gridhtml = df.to_html()
+        if self.pd_replace_crlf == True:
+            outhtml = self.replaceHTMLCRLF(gridhtml)
+        else:
+            outhtml = gridhtml
+
+        window_options = "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1024, height=800, top=0, left=0"
+        base = """var win = window.open("", "&~&", "*~*");
+        win.document.body.innerHTML = `%~%`;
+        """
+        JS = base.replace('%~%', outhtml)
+        JS = JS.replace('&~&', "Current Results")
+        JS = JS.replace('*~*', window_options)
+
+        j = Javascript(JS)
+        display(j)
+
 
     def getipurl(self, url):
         ts1 = url.split("://")
