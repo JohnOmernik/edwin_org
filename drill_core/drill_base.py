@@ -271,7 +271,7 @@ class Drill(Magics):
                         display(button)
 
                         if mycnt <= self.pd_display_max:
-                            display(HTML(prev_drill.to_html(index=False)))
+                            display(HTML(df.to_html(index=self.pd_display_idx)))
 
 #Done Button Testing
                     else:
