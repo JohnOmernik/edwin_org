@@ -177,7 +177,7 @@ class Drill(Magics):
 
         df = self.myip.user_ns['prev_drill']
 
-        gridhtml = df.to_html()
+        gridhtml = df.to_html(index=self.pd_display_idx)
         if self.pd_replace_crlf == True:
             outhtml = self.replaceHTMLCRLF(gridhtml)
         else:
