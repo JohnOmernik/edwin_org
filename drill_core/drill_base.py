@@ -309,8 +309,10 @@ class Drill(Magics):
                         display(button)
 
                         if mycnt <= self.pd_display_max:
-                            print("Number of results (%s) greater than pd_display_max(%s) - Press button to see results in new window" % (mycnt, self.pd_display_max))
                             display(HTML(df.to_html(index=self.pd_display_idx)))
+                        else:
+                            print("Number of results (%s) greater than pd_display_max(%s) - Press button to see results in new window" % (mycnt, self.pd_display_max))
+
 
 #Done Button Testing
                     else:
