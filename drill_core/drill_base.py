@@ -265,7 +265,7 @@ class Drill(Magics):
 
                         self.myip.user_ns['prev_drill'] = df
 
-                        mycnt = df.count()
+                        mycnt = df.count
                         button = widgets.Button(description="Cur Results")
                         button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                         display(button)
