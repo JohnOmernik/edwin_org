@@ -43,6 +43,11 @@ class Drill(Magics):
         import ipywidgets as widgets
         super(Drill, self).__init__(shell)
         self.myip = get_ipython()
+
+        init_code = "from IPython.display import display_html, display, Javascript, FileLink, FileLinks, Image\nimport ipywidgets as widgets\n"
+        self.myip.ex(init_code)
+
+
     def retConnStatus(self):
         if self.drill_connected == True:
             print("Drill is currrently connected to %s" % self.drill_base_url)
