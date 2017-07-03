@@ -194,6 +194,10 @@ class Drill(Magics):
         j = Javascript(JS)
         display(j)
 
+        pd.set_option('max_colwidth', max_col)
+        pd.set_option('display.max_rows', max_rows)
+
+
 
     def getipurl(self, url):
         ts1 = url.split("://")
