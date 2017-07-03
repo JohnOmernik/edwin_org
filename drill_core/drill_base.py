@@ -39,6 +39,8 @@ class Drill(Magics):
     drill_headers = {}
 
     def __init__(self, shell, *args, **kwargs):
+        from IPython.display import display_html, display, Javascript, FileLink, FileLinks, Image
+        import ipywidgets as widgets
         super(Drill, self).__init__(shell)
         self.myip = get_ipython()
     def retConnStatus(self):
