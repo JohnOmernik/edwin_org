@@ -11,6 +11,14 @@ from requests.packages.urllib3.exceptions import SubjectAltNameWarning, Insecure
 from requests_toolbelt.adapters import host_header_ssl
 requests.packages.urllib3.disable_warnings(SubjectAltNameWarning)
 
+from IPython.core.display import HTML
+
+#import IPython.display
+from IPython.display import display_html, display, Javascript, FileLink, FileLinks, Image
+import ipywidgets as widgets
+
+
+
 import pandas as pd
 pd.set_option('display.max_columns', None)
 
@@ -148,6 +156,8 @@ class Drill(Magics):
         else:
             print("Drill is already connected - Please type %drill for help on what you can you do")
 
+    def resultsNewWin(self, b):
+        print("OMG I am in the class function!")
 
     def getipurl(self, url):
         ts1 = url.split("://")
@@ -163,10 +173,6 @@ class Drill(Magics):
         self.drill_headers = {}
         #self.drill_headers = {"Host": self.drill_host}
         return ipurl
-
-
-
-    
 
     def runQuery(self, query):
 
@@ -256,6 +262,12 @@ class Drill(Magics):
                         df = pd.read_json(json.dumps(myrecs))
                         ip = get_ipython()
                         ip.user_ns['prev_drill'] = df
+#Button Testing
+                        button = widgets.Button(description="Results")
+                        #button.tooltip = fmd5 + ":" + str(bReplaceCRLF)
+                        button.on_click(drill_edwin_class.resultsNewWin)
+                        display(button)
+#Done Button Testing
                         return df
                     else:
                         print("Error Returned - Code: %s" % res.status_code)
