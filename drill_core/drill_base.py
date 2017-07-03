@@ -266,11 +266,11 @@ class Drill(Magics):
                         self.myip.user_ns['prev_drill'] = df
 
                         mycnt = df.count()
-                        button = widgets.Button(description="Current Results - New Window")
+                        button = widgets.Button(description="Cur Results")
                         button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                         display(button)
 
-                        if mycount <= self.pd_display_max:
+                        if mycnt <= self.pd_display_max:
                             display(HTML(prev_drill.to_html(index=False)))
 
 #Done Button Testing
