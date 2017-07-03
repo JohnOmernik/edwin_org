@@ -27,6 +27,8 @@ class Drill(Magics):
     myip = None
     session = None
     drill_connected = False
+    pd_display_idx = False
+    pd_display_max = 1000
     drill_host = ""
     drill_pinned_ip = ""
     drill_user = ""
@@ -260,14 +262,18 @@ class Drill(Magics):
                         myrecs = jrecs['rows']
 #                    df = pd.DataFrame.from_records([l for l in myrecs], coerce_float=True)
                         df = pd.read_json(json.dumps(myrecs))
+
                         self.myip.user_ns['prev_drill'] = df
-#Button Testing
-                        button = widgets.Button(description="Results")
-                        #button.tooltip = fmd5 + ":" + str(bReplaceCRLF)
+
+                        mycnt = df.count()
+                        button = widgets.Button(description="Current Results - New Window")
                         button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                         display(button)
+
+                        if mycount <= self.pd_display_max:
+                            display(HTML(prev_drill.to_html(index=False)))
+
 #Done Button Testing
-                        return df
                     else:
                         print("Error Returned - Code: %s" % res.status_code)
                         emsg = json.loads(res.text)
