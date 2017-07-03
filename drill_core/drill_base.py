@@ -24,6 +24,7 @@ pd.set_option('display.max_columns', None)
 
 @magics_class
 class Drill(Magics):
+    myip = None
     session = None
     drill_connected = False
     drill_host = ""
@@ -36,7 +37,7 @@ class Drill(Magics):
 
     def __init__(self, shell, *args, **kwargs):
         super(Drill, self).__init__(shell)
-
+        self.myip = get_ipython()
     def retConnStatus(self):
         if self.drill_connected == True:
             print("Drill is currrently connected to %s" % self.drill_base_url)
@@ -69,10 +70,10 @@ class Drill(Magics):
 
             print("")
             print("Now, please enter the password you wish to connect with:")
-            ip = get_ipython()
+
             tpass = ""
-            ip.ex("from getpass import getpass\ntpass = getpass(prompt='Drill Connect Password: ')")
-            tpass = ip.user_ns['tpass']
+            self.myip.ex("from getpass import getpass\ntpass = getpass(prompt='Drill Connect Password: ')")
+            tpass = self.myip.user_ns['tpass']
             self.session = requests.Session()
 
             if self.drill_pin_to_ip == True:
@@ -88,7 +89,7 @@ class Drill(Magics):
                 self.drill_base_url = turl
             self.drill_user = tuser
             self.drill_pass = tpass
-            ip.user_ns['tpass'] = ""
+            self.myip.user_ns['tpass'] = ""
             #try:
             if 1 == 1:
                 self.session = self.authDrill()
@@ -123,10 +124,9 @@ class Drill(Magics):
             if tmpu != "":
                 turl = tmpu
             print("Now, please enter the password you wish to connect with:")
-            ip = get_ipython()
             tpass = ""
-            ip.ex("from getpass import getpass\ntpass = getpass(prompt='Drill Connect Password: ')")
-            tpass = ip.user_ns['tpass']
+            self.myip.ex("from getpass import getpass\ntpass = getpass(prompt='Drill Connect Password: ')")
+            tpass = self.myip.user_ns['tpass']
             self.session = requests.Session()
 
             if self.drill_pin_to_ip == True:
@@ -144,7 +144,7 @@ class Drill(Magics):
                 self.drill_base_url = turl
             self.drill_user = tuser
             self.drill_pass = tpass
-            ip.user_ns['tpass'] = ""
+            self.myip.user_ns['tpass'] = ""
             #try:
             if 1 == 1:
                 self.session = self.authDrill()
@@ -260,12 +260,11 @@ class Drill(Magics):
                         myrecs = jrecs['rows']
 #                    df = pd.DataFrame.from_records([l for l in myrecs], coerce_float=True)
                         df = pd.read_json(json.dumps(myrecs))
-                        ip = get_ipython()
-                        ip.user_ns['prev_drill'] = df
+                        self.myip.user_ns['prev_drill'] = df
 #Button Testing
                         button = widgets.Button(description="Results")
                         #button.tooltip = fmd5 + ":" + str(bReplaceCRLF)
-                        button.on_click(drill_edwin_class.resultsNewWin)
+                        button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                         display(button)
 #Done Button Testing
                         return df
