@@ -298,6 +298,7 @@ class Drill(Magics):
                         if res.text.find("Invalid username/password credentials.") >= 0:
                             print("It looks like your Drill Session has expired, please run %drill connect to resolve")
                             self.disconnectDrill()
+                            self.myip.set_next_input("%drill connect")
                         else:
                             try:
                                 jrecs = json.loads(res.text)
