@@ -295,28 +295,30 @@ class Drill(Magics):
                     pass
                 else:
                     if res.status_code == 200:
-                        try:
-                            jrecs = json.loads(res.text)
-                        except:
-                            print("Error loading: %s " % res.text)
-                        myrecs = jrecs['rows']
-#                    df = pd.DataFrame.from_records([l for l in myrecs], coerce_float=True)
-                        df = pd.read_json(json.dumps(myrecs))
-
-                        self.myip.user_ns['prev_drill'] = df
-
-                        mycnt = len(df)
-                        button = widgets.Button(description="Cur Results")
-                        button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
-                        display(button)
-
-                        if mycnt <= self.pd_display_max:
-                            display(HTML(df.to_html(index=self.pd_display_idx)))
+                        if res.text.find("Invalid username/password credentials.") >= 0:
+                            print("It looks like your Drill Session has expired, please run %drill connect to resolve")
+                            self.disconnectDrill()
                         else:
-                            print("Number of results (%s) greater than pd_display_max(%s) - Press button to see results in new window" % (mycnt, self.pd_display_max))
+                            try:
+                                jrecs = json.loads(res.text)
+                            except:
+                                print("Error loading: %s " % res.text)
+                            myrecs = jrecs['rows']
+                            df = pd.read_json(json.dumps(myrecs))
+
+                            self.myip.user_ns['prev_drill'] = df
+
+                            mycnt = len(df)
+                            button = widgets.Button(description="Cur Results")
+                            button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
+                            display(button)
+
+                            if mycnt <= self.pd_display_max:
+                                display(HTML(df.to_html(index=self.pd_display_idx)))
+                            else:
+                                print("Number of results (%s) greater than pd_display_max(%s) - Press button to see results in new window" % (mycnt, self.pd_display_max))
 
 
-#Done Button Testing
                     else:
                         print("Error Returned - Code: %s" % res.status_code)
                         emsg = json.loads(res.text)
