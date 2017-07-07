@@ -252,7 +252,7 @@ class Drill(Magics):
         if r.status_code == 200:
             if r.text.find("Invalid username/password credentials") >= 0:
                 raise Exception("Invalid username/password credentials")
-            elif r.text.find("Number of Drill Bits") >= 0:
+            elif r.text.find('<li><a href="/logout">Log Out (') >= 0:
                 pass
             else:
                 raise Exception("Unknown HTTP 200 Code: %s" % r.text)
