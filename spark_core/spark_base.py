@@ -51,7 +51,7 @@ class Spark(Magics):
             print("SPARK_HOME not set, please work with your administrator to setup - Nothing started")
 
         if self.spark_running == False:
-            cmd = "import findspark\nfindspark.init()\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\").getOrCreate()"
+            cmd = "import findspark\nimport time\nfindspark.init()\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\").getOrCreate()"
             print("Running the following code to start spark:")
             print(cmd)
             self.myip.run_cell(cmd)
