@@ -1,7 +1,9 @@
 {
     "matrix_version": "0.0.1",
     "replacements": {
-        "%org_name%": "Your Org"
+        "%org_name%": "Your Org",
+        "%nbsshhost%": "ENV:JPY_USER_SSH_HOST",
+        "%nbsshport%": "ENV:JPY_USER_SSH_PORT"
     },
     "edwin_classes":{
         "Drill": "drill_core",
