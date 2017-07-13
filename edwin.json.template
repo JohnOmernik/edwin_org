@@ -43,6 +43,16 @@
                 "> scp -P%nbsshport% /path/to/your/file.txt %nbuser%@%nbsshhost%:/home/%nbuser%/"
             ]
         },
+        "datagrid": {
+            "list": 1,
+            "type": "full",
+            "short_desc": "Show other options for display of data",
+            "resp": [
+                "There are other options for data display such as qgrid",
+                "While we may be incorporating these directly in the future, to run them now on your results, run these commands"
+            ],
+            "set_next": "import qgrid\nqgrid.nbinstall(overwrite=True)\nqgrid.show_grid(prev_drill, remote_js=True, grid_options={\"enableColumnReorder\": True, \"forceFitColumns:\":False})"
+        },
         "datasets": {
             "list": 1,
             "type": "full",
