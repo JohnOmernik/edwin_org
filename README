@@ -1,13 +1,38 @@
 # Edwin Org Template
 --------
-## Installtion
+This can be an example use of edwin_org.  This is extenible!
 
-- First you need Edwin (core) at https://github.com/johnomernik/edwin
-- The get this repo, put it somewhere all notebook servers will have access to it
+## Installtion
+- First you need Edwin (core) at https://github.com/johnomernik/edwin - Install this on your server/container running Juypyter Notebook.
+- The get this repo, put it somewhere all notebook servers will have access to it (or develop a syncing methodology... not advised)
 - Rename edwin.json.template to edwin.json in root of the repo. Edit it (see below)
 - Ensure all your class files that you will be calling are ready to go.
 - Start a notebook server with the ENV Variable "EDWIN_ORG" pointing to root of the directory
-- You are goalden!
+- Edwin should be loaded
 
 
-More to come
+## Important ENV Variables
+When starting a notebook server, there are ENV variables that are important to the operation of Edwin_org - Note there are other variables that Edwin may use for "replacements" That's a feature where you can code in the json variables
+so that user specifc things passed in from the ENV are replaced in Edwin's responses.
+
+| Variable          | Req/Opt | Desc |
+| --------          | ------- | ---- |
+| EDWIN_ORG         | REQ     | This is the path the Edwin Org directory, edwin_org will not run without this |
+| EDWIN_USER        | OPT     | The path to Edwin User.  Optional and not required |
+| JPY_USER          | OPT     | This is the user running in the notebook. Edwin uses this to replace "%nbuser% in responses. So if you set this on your notebook server, it helps Edwin customize things|
+| JPY_USER_SSH_HOST | OPT     | Included in the template is if you are running an ssh server on your notebook server for users to connect to as well. If you fill these, Edwin Org can help a user find them |
+| JPY_USER_SSH_PORT"| OPT     | Included in the template is if you are running an ssh server on your notebook server for users to connect to as well. If you fill these, Edwin Org can help a user find them |
+| DRILL_BASE_URL    | OPT     | The class included for Edwin Org to connect with Apache Drill allows a ENV to be set to help smooth the connection process |
+| SPARK_HOME        | OPT     | The class included for Edwin Org to connect with Apache Spark can use this to help setup your Spark Driver/ENV |
+| ORG_NAME          | OPT     | If you want to refer to your organization in Edwin Org's responses, you can set this variable |
+
+
+## Included in this example
+- A basic class to start Apache Spark
+- A basic class to connect to Apache Drill
+- A Demo Class
+
+## Concepts
+More to come shortly
+
+
