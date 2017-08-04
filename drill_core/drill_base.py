@@ -310,12 +310,12 @@ class Drill(Magics):
                             df = pd.read_json(json.dumps(myrecs))
 
                             self.myip.user_ns['prev_drill'] = df
-
                             mycnt = len(df)
+                            print("%s Records in Approx %s seconds" % (mycnt,qtime))
+                            print("")
                             button = widgets.Button(description="Cur Results")
                             button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                             display(button)
-                            print("Approx Query Time: %s seconds" % qtime)
                             if mycnt <= self.pd_display_max:
                                 display(HTML(df.to_html(index=self.pd_display_idx)))
                             else:
