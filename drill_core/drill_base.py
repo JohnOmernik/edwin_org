@@ -6,6 +6,7 @@ import json
 from getpass import getpass
 import sys
 import os
+import time
 from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic, line_cell_magic)
 from requests.packages.urllib3.exceptions import SubjectAltNameWarning, InsecureRequestWarning
 from requests_toolbelt.adapters import host_header_ssl
@@ -217,7 +218,6 @@ class Drill(Magics):
         return ipurl
 
     def runQuery(self, query):
-
         if query.find(";") >= 0:
             print("WARNING - Do not type a trailing semi colon on queries, your query will fail (like it probably did here)")
         if self.drill_pin_to_ip == True:
@@ -230,10 +230,12 @@ class Drill(Magics):
             url = self.drill_base_url + "/query.json"
             payload = {"queryType":"SQL", "query":query}
             cur_headers = self.drill_headers
-
             cur_headers["Content-type"] = "application/json"
+            starttime = int(time.time())
             r = self.session.post(url, data=json.dumps(payload), headers=cur_headers, verify=verify)
-            return r
+            endtime = int(time.time())
+            query_time = endtime - starttime
+            return r, query_time
 
 
     def authDrill(self):
@@ -290,7 +292,7 @@ class Drill(Magics):
                 print("I am sorry, I don't know what you want to do, try just %drill for help options")
         else:
             if self.drill_connected == True:
-                res = self.runQuery(cell)
+                res, qtime = self.runQuery(cell)
                 if res == "notconnected":
                     pass
                 else:
@@ -313,7 +315,7 @@ class Drill(Magics):
                             button = widgets.Button(description="Cur Results")
                             button.on_click(self.myip.user_ns['drill_edwin_class'].resultsNewWin)
                             display(button)
-
+                            print("Approx Query Time: %s seconds" % qtime)
                             if mycnt <= self.pd_display_max:
                                 display(HTML(df.to_html(index=self.pd_display_idx)))
                             else:
