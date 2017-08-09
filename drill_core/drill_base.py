@@ -304,10 +304,13 @@ class Drill(Magics):
                         else:
                             try:
                                 jrecs = json.loads(res.text, object_pairs_hook=OrderedDict)
+                                print(res.text) # Debug
                             except:
                                 print("Error loading: %s " % res.text)
-                            myrecs = OrderedDict(jrecs['rows'])
-                            df = pd.read_json(json.dumps(myrecs))
+                            myrecs = json.dumps(OrderedDict(jrecs['rows']))
+                            print("::")
+                            print(myrecs)
+                            df = pd.read_json(myrecs)
 
                             self.myip.user_ns['prev_drill'] = df
                             mycnt = len(df)
