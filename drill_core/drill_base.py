@@ -10,7 +10,7 @@ from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic, li
 from requests.packages.urllib3.exceptions import SubjectAltNameWarning, InsecureRequestWarning
 from requests_toolbelt.adapters import host_header_ssl
 requests.packages.urllib3.disable_warnings(SubjectAltNameWarning)
-
+from collections import OrderedDict
 from IPython.core.display import HTML
 
 #import IPython.display
@@ -301,7 +301,7 @@ class Drill(Magics):
                             self.myip.set_next_input("%drill connect")
                         else:
                             try:
-                                jrecs = json.loads(res.text)
+                                jrecs = json.loads(res.text, object_pairs_hook=OrderedDict)
                             except:
                                 print("Error loading: %s " % res.text)
                             myrecs = jrecs['rows']
@@ -322,7 +322,7 @@ class Drill(Magics):
 
                     else:
                         print("Error Returned - Code: %s" % res.status_code)
-                        emsg = json.loads(res.text)
+                        emsg = json.loads(res.text, object_pairs_hook=OrderedDict)
                         print("Error Text:\n%s" % emsg['errorMessage'])
             else:
                 print("Drill is not connected: Please see help at %drill  - To Connect: %drill connect")
