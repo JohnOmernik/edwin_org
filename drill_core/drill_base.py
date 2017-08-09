@@ -308,9 +308,12 @@ class Drill(Magics):
                             except:
                                 print("Error loading: %s " % res.text)
                             myrecs = json.dumps(OrderedDict(jrecs['rows']))
+                            myold = jrecs['rows']
                             print("::")
                             print(myrecs)
-                            df = pd.read_json(myrecs)
+                            print("::")
+                            print(myold)
+                            df = pd.read_json(json.dumps(myold))
 
                             self.myip.user_ns['prev_drill'] = df
                             mycnt = len(df)
