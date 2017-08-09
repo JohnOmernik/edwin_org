@@ -304,7 +304,6 @@ class Drill(Magics):
                         else:
                             try:
                                 jrecs = json.loads(res.text, object_pairs_hook=OrderedDict)
-                                print(res.text) # Debug
                             except:
                                 print("Error loading: %s " % res.text)
                             cols = jrecs['columns']
