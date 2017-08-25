@@ -61,7 +61,7 @@ class Mapr(Magics):
         bfound = False
 
         for x in cluster_cldbs:
-            cldbhost = x.split(":")
+            cldbhost = x.split(":")[0]
             cldburl = "https://" + cldbhost + ":8443/"
             print("Trying %s" % cldburl)
             verify = False
