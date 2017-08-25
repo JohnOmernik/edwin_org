@@ -22,7 +22,6 @@ import ipywidgets as widgets
 class Mapr(Magics):
     myip = None
     mapr_connected = False
-    
     mapr_host = ""
     mapr_user = ""
     mapr_pass = ""
@@ -63,7 +62,7 @@ class Mapr(Magics):
 
         for x in cluster_cldbs:
             cldbhost = x.split(":")[0]
-            cldburl = "https://" + cldbhost + ":8443/"
+            cldburl = "https://" + cldbhost + ":8443"
             print("Trying %s" % cldburl)
             verify = False
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -79,8 +78,21 @@ class Mapr(Magics):
             #    print("CLDB %s did not respond" % cldbhost)
         if bfound != True:
             raise Exception("Could not find active CLDB!")
+
+
+
+
         return bfound
 
+
+
+    def sendMaprRequest(self, apireq):
+        s = requests.session()
+        verify = False
+        uri = self.mapr_base_url + apireq
+
+        r = s.get(uri, verify=verify, auth=(self.mapr_user, self.mapr_pass))
+        return r.status_code, r.text
 
     def connectMapr(self, use_defaults=True):
         global tpass
@@ -101,10 +113,14 @@ class Mapr(Magics):
 
             cldb = self.getMapRCLDB()
             print("Now, please enter the password you wish to connect with for %s:" % tuser)
-
             tpass = ""
             self.myip.ex("from getpass import getpass\ntpass = getpass(prompt='MapR Connect Password: ')")
             tpass = self.myip.user_ns['tpass']
+
+            # Now we need to send a command maprcli entity list 
+            retcode, rettext= sendMaprRequest('entity/list')
+            print("Code: %s - %s" % (retcode, rettext))
+
 
             self.mapr_connected = True
             print("%s - MapR Connected!" % self.mapr_base_url)
