@@ -66,15 +66,15 @@ class Mapr(Magics):
             print("Trying %s" % cldburl)
             verify = False
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-            try:
+            if 1 == 1:
                 r = self.session.get(cldburl, verify=verify)
                 if r.status_code == 200:
                     print("Using %s as Active CLDB Host at %s" % (cldbhost, cldburl))
                     self.mapr_base_url = cldburl
                     bfound = True
                     break
-            except:
-                print("CLDB %s did not respond" % cldbhost)
+            #except:
+            #    print("CLDB %s did not respond" % cldbhost)
         if bfound != True:
             raise Exception("Could not find active CLDB!")
         return bfound
