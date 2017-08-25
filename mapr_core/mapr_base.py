@@ -56,7 +56,7 @@ class Mapr(Magics):
         confitems = m.strip().split(" ")
         cluster_name = confitems[0]
         cluster_secure = confitems[1].split("=")[1]
-        cluster_cldbs = confitems[2].split[","]
+        cluster_cldbs = confitems[2].split(",")
         print("Searching for Active CLDB in %s" % cluster_cldb)
         bfound = False
 
