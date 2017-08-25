@@ -118,7 +118,7 @@ class Mapr(Magics):
             tpass = self.myip.user_ns['tpass']
 
             # Now we need to send a command maprcli entity list 
-            retcode, rettext = self.sendMaprRequest('entity/list')
+            retcode, rettext = self.sendMaprRequest('/entity/list')
             print("Code: %s - %s" % (retcode, rettext))
 
 
