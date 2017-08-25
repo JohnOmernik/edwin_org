@@ -90,7 +90,7 @@ class Mapr(Magics):
         s = requests.session()
         verify = False
         uri = self.mapr_base_url + apireq
-
+        print("URL Requested: %s" % uri)
         r = s.get(uri, verify=verify, auth=(self.mapr_user, self.mapr_pass))
         return r.status_code, r.text
 
