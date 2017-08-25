@@ -22,6 +22,7 @@ import ipywidgets as widgets
 class Mapr(Magics):
     myip = None
     mapr_connected = False
+    
     mapr_host = ""
     mapr_user = ""
     mapr_pass = ""
@@ -67,7 +68,8 @@ class Mapr(Magics):
             verify = False
             requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             if 1 == 1:
-                r = self.session.get(cldburl, verify=verify)
+                s = requests.session()
+                r = s.get(cldburl, verify=verify)
                 if r.status_code == 200:
                     print("Using %s as Active CLDB Host at %s" % (cldbhost, cldburl))
                     self.mapr_base_url = cldburl
