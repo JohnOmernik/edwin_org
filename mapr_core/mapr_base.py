@@ -203,7 +203,8 @@ class Mapr(Magics):
                 print("I am sorry, I don't know what you want to do, try just %mapr for help options")
         else:
             if self.mapr_connected == True:
-                print("I would run:\n %s" % cell)
+                code, text = sendMaprRequest(cell)
+                print("Code: %s\n%s" % (code, text))
             else:
                 print("Mapr is not connected: Please see help at %mapr  - To Connect: %mapr connect")
 
