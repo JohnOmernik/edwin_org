@@ -53,10 +53,10 @@ class Mapr(Magics):
         r = open("/opt/mapr/conf/mapr-clusters.conf", "r")
         m = r.read()
         r.close()
-        items = m.strip().split(" ")
-        cluster_name = items[0]
-        cluster_secure = items[1].split("=")[1]
-        cluster_cldbs = items[2].split[","]
+        confitems = m.strip().split(" ")
+        cluster_name = confitems[0]
+        cluster_secure = confitems[1].split("=")[1]
+        cluster_cldbs = confitems[2].split[","]
         print("Searching for Active CLDB in %s" % cluster_cldb)
         bfound = False
 
