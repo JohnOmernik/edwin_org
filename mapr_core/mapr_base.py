@@ -156,6 +156,47 @@ class Mapr(Magics):
 
 
 
+
+    def printStreamHelp():
+        h = """{"stream": [{"create": ["-path Stream Path", "[ -ttl Time to live in seconds. default:604800 ]", "[ -autocreate Auto create topics. default:true ]", "[ -defaultpartitions Default partitions per topic. default:1 ]", "[ -compression off|lz4|lzf|zlib. default:inherit from parent directory ]", "[ -produceperm Producer access control expression. default u:creator ]", "[ -consumeperm Consumer access control expression. default u:creator ]", "[ -topicperm Topic CRUD access control expression. default u:creator ]", "[ -copyperm Stream copy access control expression. default u:creator ]", "[ -adminperm Stream administration access control expression. default u:creator ]", "[ -copymetafrom Stream to copy attributes from. default:none ]"]}, {"edit": ["-path Stream Path", "[ -ttl Time to live in seconds ]", "[ -autocreate Auto create topics ]", "[ -defaultpartitions Default partitions per topic ]", "[ -compression off|lz4|lzf|zlib ]", "[ -produceperm Producer access control expression. default u:creator ]", "[ -consumeperm Consumer access control expression. default u:creator ]", "[ -topicperm Topic CRUD access control expression. default u:creator ]", "[ -copyperm Stream copy access control expression. default u:creator ]", "[ -adminperm Stream administration access control expression. default u:creator ]"]}, {"info": ["-path Stream Path"]}, {"delete": ["-path Stream Path"]}, {"purge": ["-path Stream Path"]}, {"topic": [{"create": ["-path Stream Path", "-topic Topic Name", "[ -partitions Number of partitions. default: attribute defaultpartitions on the stream ]"]}, {"edit": ["-path Stream Path", "-topic Topic Name", "-partitions Number of partitions"]}, {"delete": ["-path Stream Path", "-topic Topic Name"]}, {"info": ["-path Stream Path", "-topic Topic Name"]}, {"list": ["-path Stream Path"]}]}, {"cursor": [{"delete": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]"]}, {"list": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]"]}]}, {"assign": [{"list": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]", "[ -detail Detail Parameter takes no value  ]"]}]}, {"replica": [{"add": ["-path stream path", "-replica remote stream path", "[ -paused start replication in paused state. default: false ]", "[ -throttle throttle replication operations under load. default: false ]", "[ -networkencryption enable on-wire encryption. default: false ]", "[ -synchronous replicate to remote stream before acknowledging producers. default: false ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib default: compression setting on stream ]"]}, {"edit": ["-path stream path", "-replica remote stream path", "[ -newreplica renamed stream path ]", "[ -throttle throttle replication operations under load ]", "[ -networkencryption enable on-wire encryption ]", "[ -synchronous replicate to remote stream before acknowledging producers ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib ]"]}, {"list": ["-path stream path", "[ -refreshnow refreshnow. default: false ]"]}, {"remove": ["-path stream path", "-replica remote stream path"]}, {"pause": ["-path stream path", "-replica remote stream path"]}, {"resume": ["-path stream path", "-replica remote stream path"]}, {"autosetup": ["-path stream path", "-replica remote stream path", "[ -synchronous replicate to remote stream before acknowledging producers. default: false ]", "[ -multimaster set up bi-directional replication. default: false ]", "[ -throttle throttle replication operations under load. default: false ]", "[ -networkencryption enable on-wire encryption. default: false ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib default: compression setting on stream ]"]}]}, {"upstream": [{"add": ["-path stream path", "-upstream upstream stream path"]}, {"list": ["-path stream path"]}, {"remove": ["-path stream path", "-upstream upstream stream path"]}]}]}"""
+        hj = json.loads(h)
+        print(json.dumps(hj, sort_keys=False, indent=4, separators=(',', ': '))
+
+
+
+    def convertCli2Rest(cli):
+        tks = cli.split(" ")
+        params = False
+        curpramname = ""
+        retval = ""
+        cur = ""
+        valid = 1
+        for x in toks:
+            if x.find("-") == 0:
+                cur = "paramname"
+                if params == False:
+                    ratval = retval + "?"
+                    params = True
+            elif params == False:
+                cur = "base"
+            else:
+                cur = "paramval"
+
+            if cur == "base":
+                retval = retval +  "/" + x
+            elif  cur == "paramname" and curparamname == "":
+                curparamname = x
+            elif cur = "paramval" and curparamname != "":
+                retval = retval + "&" + curparamname + "=" + x
+            else:
+                print("We have an issue with statement cli")
+               valid = 0
+        return valid, retval
+
+
+$MAPRCLI stream create -path $HDFSBASE/streams/brostreams -defaultpartitions 3 -autocreate true -produceperm "\(u:mapr\|g:zetaproddata\|u:zetaadm\)" -consumeperm "\(u:mapr\|g:zetaproddata\|u:zetaadm\)" -topicperm "\(u:mapr\|g:zetaproddata\|u:zetaadm\)" -adminperm "\(u:mapr\|g:zetaproddata\|u:zetaadm
+
+
     @line_cell_magic
     def mapr(self, line, cell=None):
         if cell is None:
@@ -183,8 +224,16 @@ class Mapr(Magics):
             else:
                 print("I am sorry, I don't know what you want to do, try just %mapr for help options")
         elif cell is not None and line == "cli":
-            print("MapR CLI Requested with %s" % cell)
-        else:
+            if self.mapr_connected == True:
+                print("MapR CLI Requested with %s" % cell)
+                ret, rest = self.convertCli2Rest(cell
+                if ret == 1:
+                    code, text = self.sendMaprRequest(rest)
+                    print("Code: %s\n%s" % (code, text))
+                else:
+                    print("Count not convert %s to rest" % cell)
+
+        elif cell is not None and line == "rest":
             if self.mapr_connected == True:
                 code, text = self.sendMaprRequest(cell)
                 print("Code: %s\n%s" % (code, text))
@@ -196,3 +245,4 @@ class Mapr(Magics):
 
 
 
+  
