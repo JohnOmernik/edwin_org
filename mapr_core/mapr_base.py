@@ -116,6 +116,8 @@ class Mapr(Magics):
             tpass = ""
             self.myip.ex("from getpass import getpass\ntpass = getpass(prompt='MapR Connect Password: ')")
             tpass = self.myip.user_ns['tpass']
+            self.mapr_user = tuser
+            self.mapr_pass = tpass
 
             # Now we need to send a command maprcli entity list 
             retcode, rettext = self.sendMaprRequest('/entity/list')
