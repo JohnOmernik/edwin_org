@@ -160,7 +160,7 @@ class Mapr(Magics):
         print(json.dumps(hj, sort_keys=False, indent=4, separators=(',', ': ')))
 
     def convertCli2Rest(self, cli):
-        tks = cli.split(" ")
+        toks = cli.split(" ")
         params = False
         curpramname = ""
         retval = ""
