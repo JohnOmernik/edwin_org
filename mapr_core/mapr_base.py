@@ -119,14 +119,19 @@ class Mapr(Magics):
             self.mapr_user = tuser
             self.mapr_pass = tpass
 
-            # Now we need to send a command maprcli entity list 
             retcode, rettext = self.sendMaprRequest('/entity/list')
-            print("Code: %s - %s" % (retcode, rettext))
 
-
-            self.mapr_connected = True
-            print("%s - MapR Connected!" % self.mapr_base_url)
-
+            if retcode == 401:
+                print("MapR Connect failed due to HTTP 401 (Likely Bad Credentials)")
+                print("MapR - NOT Connected")
+                self.mapr_connected = False
+            elif retcode == 200:
+                print("MapR Connected - %s at %s" % (self.mapr_user, self.mapr_base_url))
+                self.mapr_connected = True
+            else:
+                print("Unknown Return code: %s - Text of Error:" % retcode)
+                print(rettext)
+                self.mapr_connected = False
         else:
             print("MapR is already connected - Please type %mapr for help on what you can you do")
 
