@@ -133,27 +133,6 @@ class Mapr(Magics):
 
 
 
-
-    def runQuery(self, query):
-        if query.find(";") >= 0:
-            print("WARNING - Do not type a trailing semi colon on queries, your query will fail (like it probably did here)")
-        if self.drill_pin_to_ip == True:
-            verify = False
-            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-        else:
-            verify = "/etc/ssl/certs/ca-certificates.crt"
-
-        if self.drill_connected == True:
-            url = self.drill_base_url + "/query.json"
-            payload = {"queryType":"SQL", "query":query}
-            cur_headers = self.drill_headers
-            cur_headers["Content-type"] = "application/json"
-            starttime = int(time.time())
-            r = self.session.post(url, data=json.dumps(payload), headers=cur_headers, verify=verify)
-            endtime = int(time.time())
-            query_time = endtime - starttime
-            return r, query_time
-
     def printStreamHelp(self):
         h = """{"stream": [{"create": ["-path Stream Path", "[ -ttl Time to live in seconds. default:604800 ]", "[ -autocreate Auto create topics. default:true ]", "[ -defaultpartitions Default partitions per topic. default:1 ]", "[ -compression off|lz4|lzf|zlib. default:inherit from parent directory ]", "[ -produceperm Producer access control expression. default u:creator ]", "[ -consumeperm Consumer access control expression. default u:creator ]", "[ -topicperm Topic CRUD access control expression. default u:creator ]", "[ -copyperm Stream copy access control expression. default u:creator ]", "[ -adminperm Stream administration access control expression. default u:creator ]", "[ -copymetafrom Stream to copy attributes from. default:none ]"]}, {"edit": ["-path Stream Path", "[ -ttl Time to live in seconds ]", "[ -autocreate Auto create topics ]", "[ -defaultpartitions Default partitions per topic ]", "[ -compression off|lz4|lzf|zlib ]", "[ -produceperm Producer access control expression. default u:creator ]", "[ -consumeperm Consumer access control expression. default u:creator ]", "[ -topicperm Topic CRUD access control expression. default u:creator ]", "[ -copyperm Stream copy access control expression. default u:creator ]", "[ -adminperm Stream administration access control expression. default u:creator ]"]}, {"info": ["-path Stream Path"]}, {"delete": ["-path Stream Path"]}, {"purge": ["-path Stream Path"]}, {"topic": [{"create": ["-path Stream Path", "-topic Topic Name", "[ -partitions Number of partitions. default: attribute defaultpartitions on the stream ]"]}, {"edit": ["-path Stream Path", "-topic Topic Name", "-partitions Number of partitions"]}, {"delete": ["-path Stream Path", "-topic Topic Name"]}, {"info": ["-path Stream Path", "-topic Topic Name"]}, {"list": ["-path Stream Path"]}]}, {"cursor": [{"delete": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]"]}, {"list": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]"]}]}, {"assign": [{"list": ["-path Stream Path", "[ -consumergroup Consumer Group ID ]", "[ -topic Topic Name ]", "[ -partition Partition ID ]", "[ -detail Detail Parameter takes no value  ]"]}]}, {"replica": [{"add": ["-path stream path", "-replica remote stream path", "[ -paused start replication in paused state. default: false ]", "[ -throttle throttle replication operations under load. default: false ]", "[ -networkencryption enable on-wire encryption. default: false ]", "[ -synchronous replicate to remote stream before acknowledging producers. default: false ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib default: compression setting on stream ]"]}, {"edit": ["-path stream path", "-replica remote stream path", "[ -newreplica renamed stream path ]", "[ -throttle throttle replication operations under load ]", "[ -networkencryption enable on-wire encryption ]", "[ -synchronous replicate to remote stream before acknowledging producers ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib ]"]}, {"list": ["-path stream path", "[ -refreshnow refreshnow. default: false ]"]}, {"remove": ["-path stream path", "-replica remote stream path"]}, {"pause": ["-path stream path", "-replica remote stream path"]}, {"resume": ["-path stream path", "-replica remote stream path"]}, {"autosetup": ["-path stream path", "-replica remote stream path", "[ -synchronous replicate to remote stream before acknowledging producers. default: false ]", "[ -multimaster set up bi-directional replication. default: false ]", "[ -throttle throttle replication operations under load. default: false ]", "[ -networkencryption enable on-wire encryption. default: false ]", "[ -networkcompression on-wire compression type: off|lz4|lzf|zlib default: compression setting on stream ]"]}]}, {"upstream": [{"add": ["-path stream path", "-upstream upstream stream path"]}, {"list": ["-path stream path"]}, {"remove": ["-path stream path", "-upstream upstream stream path"]}]}]}"""
         hj = json.loads(h)
@@ -162,7 +141,7 @@ class Mapr(Magics):
     def convertCli2Rest(self, cli):
         toks = cli.split(" ")
         params = False
-        curpramname = ""
+        curparamname = ""
         retval = ""
         cur = ""
         valid = 1
