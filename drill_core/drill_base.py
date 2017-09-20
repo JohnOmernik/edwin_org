@@ -265,6 +265,7 @@ class Drill(Magics):
     @line_cell_magic
     def drill(self, line, cell=None):
         if cell is None:
+            line = line.replace("\r", "")
             if line == "":
                 print("Help with Drill Functions")
                 print("%drill            - This Help")
@@ -291,6 +292,7 @@ class Drill(Magics):
             else:
                 print("I am sorry, I don't know what you want to do, try just %drill for help options")
         else:
+            cell = cell.replace("\r", "")
             if self.drill_connected == True:
                 res, qtime = self.runQuery(cell)
                 if res == "notconnected":
