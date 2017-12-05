@@ -52,10 +52,12 @@ class Spark(Magics):
             print("SPARK_HOME not set, please work with your administrator to setup - Nothing started")
 
         if self.spark_running == False:
-            cmd = "import findspark\nimport time\nfindspark.init()\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\")"
+            cmd = "import findspark\nimport time\nfindspark.init()\nimport sys\nspark_home = '" + spark_home + "'\nsys.path.insert(0, spark_home + '/packages')\nsys.path.insert(0, spark_home + '/packages/graphframes.zip')\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\")"
+#sys.path.insert(0, spark_home + '/packages')\nsys.path.insert(0, spark_home + '/packages/graphframes.zip')\n
 
             if graphx == True:
-                cmd = cmd + ".config('spark.jars.packages', 'graphframes:graphframes:0.5.0-spark2.1_2.11')"
+                cmd = cmd + ".config('spark.jars', spark_home + '/packages/graphframes-0.5.0-spark2.1-s_2.11.jar').config('spark.submit.pyFiles', '/packages/graphframes.zip')"
+#.config('spark.jars.packages', 'graphfames:graphframes:0.5.0-spark2.1-s_2.11')"
             cmd = cmd + ".getOrCreate()"
 
             print("Running the following code to start spark:")
