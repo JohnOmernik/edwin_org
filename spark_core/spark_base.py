@@ -20,6 +20,7 @@ class Spark(Magics):
         print("Help with Spark Functions")
         print("%spark            - This Help")
         print("%spark start      - Start Spark Driver on this notebook")
+        print("%spark start graphx      - Start Spark Driver on this notebook with graphx package")
         print("%spark status     - Show the Connection Status of Drill")
         print("%drill stop        - Stop Spark Driver on this notebook")
         print("")
@@ -42,7 +43,7 @@ class Spark(Magics):
             self.spark_running = False
             print("Spark Driver is stopped and SparkSession variable 'spark' is set to None")
 
-    def startSpark(self):
+    def startSpark(self, graphx=False):
         try:
             spark_home = os.environ['SPARK_HOME']
             myuser = os.environ['JPY_USER']
@@ -51,7 +52,12 @@ class Spark(Magics):
             print("SPARK_HOME not set, please work with your administrator to setup - Nothing started")
 
         if self.spark_running == False:
-            cmd = "import findspark\nimport time\nfindspark.init()\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\").getOrCreate()"
+            cmd = "import findspark\nimport time\nfindspark.init()\nimport pyspark\nimport pyspark.sql\nspark = pyspark.sql.SparkSession.builder.appName(\"" + sname + "\")"
+
+            if graphx == True:
+                cmd = cmd + ".config('spark.jars.packages', 'graphframes:graphframes:0.5.0-spark2.1_2.11')"
+            cmd = cmd + ".getOrCreate()"
+
             print("Running the following code to start spark:")
             print(cmd)
             self.myip.run_cell(cmd)
@@ -69,7 +75,11 @@ class Spark(Magics):
         elif line.find("stop") >= 0:
             self.stopSpark()
         elif line.find("start") >= 0:
-            self.startSpark()
+            if line.find("graphx") >= 0:
+                self.startSpark(graphx=True)
+            else:
+                self.startSpark(graphx=False)
+
         else:
             print("I am no unsure what you mean by that... instead try these items: ")
             self.sparkHelp()
